@@ -1,0 +1,58 @@
+
+Kiến thức về Regex trong Python
+===============================
+
+1. Chức năng (Functions)
+------------------------
+- **findall**: Trả về danh sách chứa tất cả các kết quả khớp.
+- **search**: Trả về một đối tượng Match nếu có kết quả khớp ở bất cứ đâu trong chuỗi.
+- **split**: Trả về danh sách nơi chuỗi được tách tại mỗi điểm khớp.
+- **sub**: Thay thế một hoặc nhiều kết quả khớp bằng một chuỗi.
+
+2. Ký tự đặc biệt (Metacharacters)
+----------------------------------
+- **[ ]**: Một tập ký tự.
+- **\**: Đánh dấu chuỗi đặc biệt (cũng dùng để thoát ký tự đặc biệt).
+- **.**: Bất kỳ ký tự nào (ngoại trừ ký tự xuống dòng).
+- **^**: Bắt đầu với.
+- **$**: Kết thúc với.
+- **\***: Xuất hiện 0 hoặc nhiều lần.
+- **+**: Xuất hiện 1 hoặc nhiều lần.
+- **?**: Xuất hiện 0 hoặc 1 lần.
+- **{ }**: Chính xác số lần xuất hiện.
+- **|**: Hoặc.
+- **( )**: Nhóm và bắt giữ.
+
+3. Các cờ (Flags)
+-----------------
+- **re.ASCII (re.A)**: Chỉ trả về kết quả khớp ASCII.
+- **re.DEBUG**: Trả về thông tin gỡ lỗi.
+- **re.DOTALL (re.S)**: Cho phép dấu `.` khớp với tất cả ký tự (bao gồm xuống dòng).
+- **re.IGNORECASE (re.I)**: Khớp không phân biệt hoa thường.
+- **re.MULTILINE (re.M)**: Trả về kết quả khớp ở đầu mỗi dòng.
+- **re.NOFLAG**: Không có cờ nào được đặt.
+- **re.UNICODE (re.U)**: Trả về kết quả Unicode (mặc định Python 3).
+- **re.VERBOSE (re.X)**: Cho phép sử dụng khoảng trắng và chú thích, làm mẫu dễ đọc hơn.
+
+4. Các dãy đặc biệt (Special Sequences)
+----------------------------------------
+- **\A**: Trả về kết quả nếu chuỗi bắt đầu với mẫu.
+- **\b**: Trả về kết quả nếu mẫu ở đầu hoặc cuối một từ (dùng `r"..."` để đánh dấu raw string).
+- **\B**: Trả về kết quả nếu mẫu có mặt nhưng không ở đầu hoặc cuối từ.
+- **\d**: Trả về kết quả nếu chuỗi chứa chữ số (0-9).
+- **\D**: Trả về kết quả nếu chuỗi không chứa chữ số.
+- **\s**: Trả về kết quả nếu chuỗi chứa ký tự khoảng trắng.
+- **\S**: Trả về kết quả nếu chuỗi không chứa ký tự khoảng trắng.
+- **\w**: Trả về kết quả nếu chuỗi chứa ký tự từ, chữ số hoặc dấu gạch dưới (`a-z`, `A-Z`, `0-9`, `_`).
+- **\W**: Trả về kết quả nếu chuỗi không chứa ký tự từ (phủ định `\w`).
+- **\Z**: Trả về kết quả nếu chuỗi kết thúc với mẫu.
+
+5. Tập ký tự (Sets)
+--------------------
+- **[arn]**: Trả về kết quả nếu một trong các ký tự `a`, `r`, hoặc `n` có mặt.
+- **[a-n]**: Trả về kết quả cho bất kỳ ký tự chữ thường nào từ `a` đến `n`.
+- **[^arn]**: Trả về kết quả cho bất kỳ ký tự nào KHÔNG phải `a`, `r`, hoặc `n`.
+- **[0-9]**: Trả về kết quả cho bất kỳ chữ số nào từ `0` đến `9`.
+- **[0-5][0-9]**: Trả về kết quả cho bất kỳ số hai chữ số từ `00` đến `59`.
+- **[a-zA-Z]**: Trả về kết quả cho bất kỳ ký tự chữ thường hoặc hoa nào từ `a` đến `z` hoặc `A` đến `Z`.
+- Trong tập ký tự, các ký tự như `+`, `*`, `?`, `.` không có ý nghĩa đặc biệt và được hiểu như ký tự thông thường.
