@@ -1,0 +1,65 @@
+Trong **scikit-learn**, `Pipeline` là một lớp giúp bạn kết hợp tuần tự nhiều bước xử lý dữ liệu và mô hình hóa vào trong một đối tượng duy nhất. Mỗi “bước” (stage) có thể là một biến đổi (transformer) hoặc một mô hình (estimator). Mục đích chính của `Pipeline` là:
+
+1. **Tổ chức mã sạch hơn**  
+   Thay vì viết lần lượt từng dòng: chuyển đổi dữ liệu, chuẩn hóa, chọn đặc trưng, rồi huấn luyện mô hình, bạn gom tất cả vào một chuỗi dễ đọc — mỗi bước có tên rõ ràng.
+
+2. **Ngăn ngừa rò rỉ dữ liệu (data leakage)**  
+   Khi dùng cross-validation hay tìm siêu tham số (`GridSearchCV`), `Pipeline` đảm bảo rằng mọi biến đổi (ví dụ: chuẩn hóa mean-std, chọn đặc trưng) chỉ được tính trên tập huấn luyện của mỗi fold, rồi áp dụng lên tập kiểm tra tương ứng. Nhờ vậy, thông tin của tập kiểm tra không “lọt” vào bước tiền xử lý.
+
+3. **Dễ dàng tune siêu tham số**  
+   Bạn có thể dùng `GridSearchCV` trực tiếp trên `Pipeline`, truyền vào các tham số của từng bước thông qua cú pháp `tên_bước__tên_tham_số`. Ví dụ:
+   ```python
+   from sklearn.pipeline import Pipeline
+   from sklearn.preprocessing import StandardScaler
+   from sklearn.decomposition import PCA
+   from sklearn.svm import SVC
+   from sklearn.model_selection import GridSearchCV
+
+   pipe = Pipeline([
+       ('scaler', StandardScaler()),
+       ('pca', PCA()),
+       ('clf', SVC())
+   ])
+
+   param_grid = {
+       'pca__n_components': [5, 10, 15],
+       'clf__C': [0.1, 1, 10],
+       'clf__kernel': ['linear', 'rbf']
+   }
+
+   search = GridSearchCV(pipe, param_grid, cv=5)
+   search.fit(X_train, y_train)
+   ```
+
+4. **Tái sử dụng và triển khai**  
+   Khi đã có pipeline hoàn chỉnh, bạn chỉ cần gọi `pipeline.fit()` rồi `pipeline.predict()` hoặc `pipeline.transform()` mà không phải lặp lại từng bước chuyển đổi.
+
+---
+
+### Các thành phần chính của Pipeline
+
+- **Transformers**: Các đối tượng có phương thức `fit` và `transform` (hoặc chỉ `fit_transform`), ví dụ `StandardScaler`, `PCA`, `OneHotEncoder`.  
+- **Estimator**: Bước cuối cùng của pipeline thường là một mô hình (có `fit` và `predict`), ví dụ `LogisticRegression`, `RandomForestClassifier`.  
+- **Steps**: Danh sách các tuple `(tên_bước, đối_tượng)` xác định thứ tự xử lý.
+
+---
+
+### Khi nào nên dùng Pipeline
+
+- Bạn có **nhiều bước tiền xử lý** (chọn đặc trưng, biến đổi số liệu, mã hóa categorical…) trước khi huấn luyện.  
+- Muốn **đảm bảo tính nhất quán** trong toàn bộ quy trình (đào tạo, đánh giá, triển khai).  
+- Cần **tìm siêu tham số** trên các bước biến đổi và mô hình cùng lúc.  
+- Muốn **tái sử dụng** quy trình trên dữ liệu mới một cách đơn giản.
+
+---
+
+### Lợi ích ngắn gọn
+
+- **Modular**: Mỗi bước có thể thay thế dễ dàng.  
+- **An toàn**: Tránh leak thông tin giữa tập huấn luyện và kiểm tra.  
+- **Tích hợp**: Hoạt động liền mạch với `GridSearchCV`, `cross_val_score`, v.v.  
+- **Khả năng mở rộng**: Bạn có thể xây thêm transformer tùy chỉnh.
+
+---
+
+Với `Pipeline`, cả quá trình từ tiền xử lý đến dự đoán trở nên **nhất quán**, **minh bạch** và **dễ bảo trì** hơn rất nhiều.
